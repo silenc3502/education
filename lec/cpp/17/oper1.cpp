@@ -30,8 +30,12 @@ int main(void){
 	Point p(3, 4);
 	p.showXY();
 
-	p.operator+(10);
+	p.operator+(10);	// p + 10
 	p.showXY();
 
 	return 0;
 }
+
+
+
+
