@@ -1,0 +1,112 @@
+
+**** Build of configuration Debug for project ext_led ****
+
+/home/koitt/ti/ccsv8/utils/bin/gmake -k -j 4 all -O 
+ 
+Building file: "../source/HL_errata.c"
+Invoking: ARM Compiler
+"/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/bin/armcl" -mv7R5 --code_state=32 --float_support=VFPv3D16 --include_path="/home/koitt/workspace/ext_led" --include_path="/home/koitt/workspace/ext_led/include" --include_path="/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include" -g --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="source/HL_errata.d_raw" --obj_directory="source"  "../source/HL_errata.c"
+Finished building: "../source/HL_errata.c"
+ 
+Building file: "../source/HL_gio.c"
+Invoking: ARM Compiler
+"/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/bin/armcl" -mv7R5 --code_state=32 --float_support=VFPv3D16 --include_path="/home/koitt/workspace/ext_led" --include_path="/home/koitt/workspace/ext_led/include" --include_path="/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include" -g --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="source/HL_gio.d_raw" --obj_directory="source"  "../source/HL_gio.c"
+Finished building: "../source/HL_gio.c"
+ 
+Building file: "../source/HL_esm.c"
+Invoking: ARM Compiler
+"/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/bin/armcl" -mv7R5 --code_state=32 --float_support=VFPv3D16 --include_path="/home/koitt/workspace/ext_led" --include_path="/home/koitt/workspace/ext_led/include" --include_path="/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include" -g --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="source/HL_esm.d_raw" --obj_directory="source"  "../source/HL_esm.c"
+Finished building: "../source/HL_esm.c"
+ 
+Building file: "../source/HL_epc.c"
+Invoking: ARM Compiler
+"/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/bin/armcl" -mv7R5 --code_state=32 --float_support=VFPv3D16 --include_path="/home/koitt/workspace/ext_led" --include_path="/home/koitt/workspace/ext_led/include" --include_path="/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include" -g --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="source/HL_epc.d_raw" --obj_directory="source"  "../source/HL_epc.c"
+Finished building: "../source/HL_epc.c"
+ 
+Building file: "../source/HL_sys_core.asm"
+Invoking: ARM Compiler
+"/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/bin/armcl" -mv7R5 --code_state=32 --float_support=VFPv3D16 --include_path="/home/koitt/workspace/ext_led" --include_path="/home/koitt/workspace/ext_led/include" --include_path="/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include" -g --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="source/HL_sys_core.d_raw" --obj_directory="source"  "../source/HL_sys_core.asm"
+Finished building: "../source/HL_sys_core.asm"
+ 
+Building file: "../source/HL_nmpu.c"
+Invoking: ARM Compiler
+"/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/bin/armcl" -mv7R5 --code_state=32 --float_support=VFPv3D16 --include_path="/home/koitt/workspace/ext_led" --include_path="/home/koitt/workspace/ext_led/include" --include_path="/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include" -g --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="source/HL_nmpu.d_raw" --obj_directory="source"  "../source/HL_nmpu.c"
+Finished building: "../source/HL_nmpu.c"
+ 
+Building file: "../source/HL_notification.c"
+Invoking: ARM Compiler
+"/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/bin/armcl" -mv7R5 --code_state=32 --float_support=VFPv3D16 --include_path="/home/koitt/workspace/ext_led" --include_path="/home/koitt/workspace/ext_led/include" --include_path="/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include" -g --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="source/HL_notification.d_raw" --obj_directory="source"  "../source/HL_notification.c"
+Finished building: "../source/HL_notification.c"
+ 
+Building file: "../source/HL_sys_intvecs.asm"
+Invoking: ARM Compiler
+"/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/bin/armcl" -mv7R5 --code_state=32 --float_support=VFPv3D16 --include_path="/home/koitt/workspace/ext_led" --include_path="/home/koitt/workspace/ext_led/include" --include_path="/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include" -g --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="source/HL_sys_intvecs.d_raw" --obj_directory="source"  "../source/HL_sys_intvecs.asm"
+Finished building: "../source/HL_sys_intvecs.asm"
+ 
+Building file: "../source/HL_sys_mpu.asm"
+Invoking: ARM Compiler
+"/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/bin/armcl" -mv7R5 --code_state=32 --float_support=VFPv3D16 --include_path="/home/koitt/workspace/ext_led" --include_path="/home/koitt/workspace/ext_led/include" --include_path="/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include" -g --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="source/HL_sys_mpu.d_raw" --obj_directory="source"  "../source/HL_sys_mpu.asm"
+Finished building: "../source/HL_sys_mpu.asm"
+ 
+Building file: "../source/HL_sys_main.c"
+Invoking: ARM Compiler
+"/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/bin/armcl" -mv7R5 --code_state=32 --float_support=VFPv3D16 --include_path="/home/koitt/workspace/ext_led" --include_path="/home/koitt/workspace/ext_led/include" --include_path="/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include" -g --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="source/HL_sys_main.d_raw" --obj_directory="source"  "../source/HL_sys_main.c"
+"../source/HL_sys_main.c", line 79: warning #112-D: statement is unreachable
+Finished building: "../source/HL_sys_main.c"
+ 
+Building file: "../source/HL_pinmux.c"
+Invoking: ARM Compiler
+"/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/bin/armcl" -mv7R5 --code_state=32 --float_support=VFPv3D16 --include_path="/home/koitt/workspace/ext_led" --include_path="/home/koitt/workspace/ext_led/include" --include_path="/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include" -g --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="source/HL_pinmux.d_raw" --obj_directory="source"  "../source/HL_pinmux.c"
+Finished building: "../source/HL_pinmux.c"
+ 
+Building file: "../source/HL_sys_phantom.c"
+Invoking: ARM Compiler
+"/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/bin/armcl" -mv7R5 --code_state=32 --float_support=VFPv3D16 --include_path="/home/koitt/workspace/ext_led" --include_path="/home/koitt/workspace/ext_led/include" --include_path="/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include" -g --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="source/HL_sys_phantom.d_raw" --obj_directory="source"  "../source/HL_sys_phantom.c"
+Finished building: "../source/HL_sys_phantom.c"
+ 
+Building file: "../source/HL_sys_dma.c"
+Invoking: ARM Compiler
+"/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/bin/armcl" -mv7R5 --code_state=32 --float_support=VFPv3D16 --include_path="/home/koitt/workspace/ext_led" --include_path="/home/koitt/workspace/ext_led/include" --include_path="/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include" -g --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="source/HL_sys_dma.d_raw" --obj_directory="source"  "../source/HL_sys_dma.c"
+Finished building: "../source/HL_sys_dma.c"
+ 
+Building file: "../source/HL_sys_pmu.asm"
+Invoking: ARM Compiler
+"/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/bin/armcl" -mv7R5 --code_state=32 --float_support=VFPv3D16 --include_path="/home/koitt/workspace/ext_led" --include_path="/home/koitt/workspace/ext_led/include" --include_path="/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include" -g --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="source/HL_sys_pmu.d_raw" --obj_directory="source"  "../source/HL_sys_pmu.asm"
+Finished building: "../source/HL_sys_pmu.asm"
+ 
+Building file: "../source/HL_sys_pmm.c"
+Invoking: ARM Compiler
+"/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/bin/armcl" -mv7R5 --code_state=32 --float_support=VFPv3D16 --include_path="/home/koitt/workspace/ext_led" --include_path="/home/koitt/workspace/ext_led/include" --include_path="/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include" -g --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="source/HL_sys_pmm.d_raw" --obj_directory="source"  "../source/HL_sys_pmm.c"
+Finished building: "../source/HL_sys_pmm.c"
+ 
+Building file: "../source/HL_sys_pcr.c"
+Invoking: ARM Compiler
+"/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/bin/armcl" -mv7R5 --code_state=32 --float_support=VFPv3D16 --include_path="/home/koitt/workspace/ext_led" --include_path="/home/koitt/workspace/ext_led/include" --include_path="/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include" -g --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="source/HL_sys_pcr.d_raw" --obj_directory="source"  "../source/HL_sys_pcr.c"
+Finished building: "../source/HL_sys_pcr.c"
+ 
+Building file: "../source/HL_sys_startup.c"
+Invoking: ARM Compiler
+"/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/bin/armcl" -mv7R5 --code_state=32 --float_support=VFPv3D16 --include_path="/home/koitt/workspace/ext_led" --include_path="/home/koitt/workspace/ext_led/include" --include_path="/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include" -g --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="source/HL_sys_startup.d_raw" --obj_directory="source"  "../source/HL_sys_startup.c"
+Finished building: "../source/HL_sys_startup.c"
+ 
+Building file: "../source/HL_system.c"
+Invoking: ARM Compiler
+"/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/bin/armcl" -mv7R5 --code_state=32 --float_support=VFPv3D16 --include_path="/home/koitt/workspace/ext_led" --include_path="/home/koitt/workspace/ext_led/include" --include_path="/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include" -g --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="source/HL_system.d_raw" --obj_directory="source"  "../source/HL_system.c"
+Finished building: "../source/HL_system.c"
+ 
+Building file: "../source/HL_sys_vim.c"
+Invoking: ARM Compiler
+"/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/bin/armcl" -mv7R5 --code_state=32 --float_support=VFPv3D16 --include_path="/home/koitt/workspace/ext_led" --include_path="/home/koitt/workspace/ext_led/include" --include_path="/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include" -g --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="source/HL_sys_vim.d_raw" --obj_directory="source"  "../source/HL_sys_vim.c"
+Finished building: "../source/HL_sys_vim.c"
+ 
+Building target: "ext_led.out"
+Invoking: ARM Linker
+"/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/bin/armcl" -mv7R5 --code_state=32 --float_support=VFPv3D16 -g --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi -z -m"ext_led.map" --heap_size=0x800 --stack_size=0x800 -i"/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/lib" -i"/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="ext_led_linkInfo.xml" --rom_model --be32 -o "ext_led.out" "./source/HL_epc.obj" "./source/HL_errata.obj" "./source/HL_esm.obj" "./source/HL_gio.obj" "./source/HL_nmpu.obj" "./source/HL_notification.obj" "./source/HL_pinmux.obj" "./source/HL_sys_core.obj" "./source/HL_sys_dma.obj" "./source/HL_sys_intvecs.obj" "./source/HL_sys_main.obj" "./source/HL_sys_mpu.obj" "./source/HL_sys_pcr.obj" "./source/HL_sys_phantom.obj" "./source/HL_sys_pmm.obj" "./source/HL_sys_pmu.obj" "./source/HL_sys_startup.obj" "./source/HL_sys_vim.obj" "./source/HL_system.obj" "../source/HL_sys_link.cmd"  -llibc.a 
+<Linking>
+warning #10366-D: automatic library build: using library "/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/lib/rtsv7R4_A_be_v3D16_eabi.lib" for the first time, so it must be built.  This may take a few minutes.
+gmake[2]: 경고: 파생된 메이크에서 -jN이 강제되었습니다: 작업서버 모드를 끕니다.
+Creating library /tmp/TI_MKLIBwTtn8G/rtsv7R4_A_be_v3D16_eabi.lib
+Finished building target: "ext_led.out"
+ 
+
+**** Build Finished ****

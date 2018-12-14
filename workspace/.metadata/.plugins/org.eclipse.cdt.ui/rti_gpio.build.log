@@ -1,0 +1,20 @@
+
+**** Build of configuration Debug for project rti_gpio ****
+
+/home/koitt/ti/ccsv8/utils/bin/gmake -k -j 4 all -O 
+ 
+Building file: "../source/HL_sys_main.c"
+Invoking: ARM Compiler
+"/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/bin/armcl" -mv7R5 --code_state=32 --float_support=VFPv3D16 --include_path="/home/koitt/workspace/rti_gpio" --include_path="/home/koitt/workspace/rti_gpio/include" --include_path="/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include" -g --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="source/HL_sys_main.d_raw" --obj_directory="source"  "../source/HL_sys_main.c"
+"../source/HL_sys_main.c", line 74: warning #225-D: function "_enable_IRQ_interrupt_" declared implicitly
+"../source/HL_sys_main.c", line 80: warning #112-D: statement is unreachable
+Finished building: "../source/HL_sys_main.c"
+ 
+Building target: "rti_gpio.out"
+Invoking: ARM Linker
+"/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/bin/armcl" -mv7R5 --code_state=32 --float_support=VFPv3D16 -g --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi -z -m"rti_gpio.map" --heap_size=0x800 --stack_size=0x800 -i"/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/lib" -i"/home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="rti_gpio_linkInfo.xml" --rom_model --be32 -o "rti_gpio.out" "./source/HL_epc.obj" "./source/HL_errata.obj" "./source/HL_esm.obj" "./source/HL_gio.obj" "./source/HL_nmpu.obj" "./source/HL_notification.obj" "./source/HL_pinmux.obj" "./source/HL_rti.obj" "./source/HL_sys_core.obj" "./source/HL_sys_dma.obj" "./source/HL_sys_intvecs.obj" "./source/HL_sys_main.obj" "./source/HL_sys_mpu.obj" "./source/HL_sys_pcr.obj" "./source/HL_sys_phantom.obj" "./source/HL_sys_pmm.obj" "./source/HL_sys_pmu.obj" "./source/HL_sys_startup.obj" "./source/HL_sys_vim.obj" "./source/HL_system.obj" "../source/HL_sys_link.cmd"  -llibc.a 
+<Linking>
+Finished building target: "rti_gpio.out"
+ 
+
+**** Build Finished ****

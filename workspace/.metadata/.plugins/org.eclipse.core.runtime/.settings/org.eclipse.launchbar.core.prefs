@@ -1,0 +1,9 @@
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/arch=x86_64
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/name=Local
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/os=linux
+configDescList=org.eclipse.launchbar.core.descriptorType.default\:r5f_uart,org.eclipse.launchbar.core.descriptorType.default\:etpwm_ext_led
+eclipse.preferences.version=1
+org.eclipse.launchbar.core.descriptorType.default\:etpwm_ext_led/activeLaunchMode=run
+org.eclipse.launchbar.core.descriptorType.default\:etpwm_ext_led/activeLaunchTarget=org.eclipse.launchbar.core.launchTargetType.local\:Local
+org.eclipse.launchbar.core.descriptorType.default\:r5f_uart/activeLaunchMode=debug
+org.eclipse.launchbar.core.descriptorType.default\:r5f_uart/activeLaunchTarget=org.eclipse.launchbar.core.launchTargetType.local\:Local
