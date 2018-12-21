@@ -112,7 +112,7 @@ int main(void)
         canGetData(canREG1, canMESSAGE_BOX2, (uint8 *)&rx_data[0]);
 #endif
 
-        switch(rx_data[0])
+        switch(rx_data[0] - 48)
         {
             case 7:
                 for(i = 1; i < 5; i++)
