@@ -53,7 +53,10 @@ int check_ode_type(void)
 	char alpha_buf[28] = {0};
 
 	for(i = 0; root->left->tokken[i]; i++)
-		alpha_buf[root->left->tokken[i] - 65]++;
+		alpha_buf[root->left->tokken[i] - 0x61]++;
+#if 0
+		alpha_buf[root->left->tokken[i] - 65]++;	// 이렇게하면 버스 에러 발생
+#endif
 
 	for(i = 0; i < 27; i++)
 		if(alpha_buf[i])
@@ -63,7 +66,73 @@ int check_ode_type(void)
 		return STANDARD;
 	else
 		// TODO
-		return 137;
+		return 0;
+}
+
+void calc_int_param(char *int_param, char *idx_cache, char *left, int *coeff)
+{
+	int i;
+	char px[32] = {0};
+
+	for(i = 1; idx_cache[i]; i++)
+	{
+		if(left[idx_cache[i]] == 0x27)
+			continue;
+		else
+			// 원래는 개수 파악이 필요하지만 그냥 구현함(3y O, 12y X)
+			strncpy(px, &left[idx_cache[i] - 2], 1);
+	}
+
+	printf("px = %s\n", px);
+
+	*coeff = atoi(px);
+
+	sprintf(int_param, "e^%sx", px);
+}
+
+void solve_standard(void)
+{
+	int i, rval, coeff, left_len, right_len, cnt = 0, prime_cnt = 0;
+	char int_param[32] = {0};
+	char idx_cache[32] = {0};
+	char left[32] = {0};
+	char right[32] = {0};
+	char loc[32] = {0};
+
+	strcpy(left, root->left->tokken);
+	strcpy(right, root->right->tokken);
+
+	left_len = strlen(left);
+	right_len = strlen(right);
+
+	printf("left len = %d\n", left_len);
+	printf("right len = %d\n", right_len);
+
+	for(i = 0; i < left_len; i++)
+	{
+		if((left[i] > 0x61 && left[i] < 0x7a) || (left[i] > 0x41 && left[i] < 0x5a))
+		{
+			loc[i]++;
+			idx_cache[cnt++] = i + 1;
+
+			if(left[i + 1] == 0x27)
+				prime_cnt++;
+		}
+	}
+
+	if(prime_cnt != 1)
+	{
+		printf("Input: Wrong Format\n");
+		return;
+	}
+	else
+		printf("Normalization OK\n");
+
+	calc_int_param(int_param, idx_cache, left, &coeff);
+	printf("int_param = %s\n", int_param);
+
+	rval = atoi(right);
+	printf("coeff = %d\trval = %d\n", coeff, rval);
 }
 
 void solve(char *str)
@@ -94,7 +163,7 @@ void solve(char *str)
 
 	if(!eq_cnt)
 	{
-		printf("Input: Wrong Format\n");
+		printf("Input: Wrong Format\n\n");
 		return;
 	}
 
@@ -109,10 +178,11 @@ void solve(char *str)
 
 		case STANDARD:
 			printf("This is Standard Type\n");
+			solve_standard();
 			break;
 
 		default:
-			printf("Not Implemented\n");
+			printf("Not Implemented\n\n");
 			break;
 	}
 }
