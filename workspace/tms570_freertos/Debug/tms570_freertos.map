@@ -1,7 +1,7 @@
 ******************************************************************************
-                  TI ARM Linker Unix v18.1.1                   
+                  TI ARM Linker Unix v18.1.3                   
 ******************************************************************************
->> Linked Fri Dec 21 03:34:05 2018
+>> Linked Fri Dec 21 09:42:31 2018
 
 OUTPUT FILE NAME:   <tms570_freertos.out>
 ENTRY POINT SYMBOL: "_c_int00"  address: 00010ee4
@@ -166,7 +166,7 @@ MODULE SUMMARY
     +--+----------------------------+-------+---------+---------+
        Total:                       54736   544       8596   
                                                              
-    /home/sdr/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/lib/rtsv7R4_A_be_v3D16_eabi.lib
+    /home/koitt/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/lib/rtsv7R4_A_be_v3D16_eabi.lib
        e_pow.c.obj                  2000    48        0      
        memcpy32.asm.obj             384     0         0      
        s_floor.c.obj                316     0         0      
