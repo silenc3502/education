@@ -205,10 +205,10 @@ void solve(char *str)
 
 int main(void)
 {
-	solve("y' + 2xy = 0");
+	solve("y = x + 3");
 	solve("y' - 3y = 24");
-	solve("xy^2 + (x^2 * y + 3)y' = 0");
-	solve("y' + 3");
+	solve("3y' - 9y = 27");
+	solve("y' - 12y = 24");
 
 	return 0;
 }
