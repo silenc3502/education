@@ -51,22 +51,26 @@ et *make_et_root(void)
 	return tmp;
 }
 
+#if 0
 void push_str_et(et **target, char *str_buf, int len, tt type)
 {
-	et *tmp = NULL;
+	et *tmp = *target;
 	//et *tmp = *target;
 	//*target = make_et_root();
 	//strncpy((*target)->tokken, str_buf, len);
 
+	while(tmp && tmp->left)
+		tmp = (*target)->right;
+
 	if(tmp && tmp->left)
 	{
-		tmp = make_et_root();
+		et *node = make_et_root();
 		strncpy(tmp->tokken, str_buf, len);
-		(*target)->right = tmp;
+		tmp->right = node;
 	}
 	else
 	{
-		tmp = *target;
+		//tmp = *target;
 		*target = make_et_root();
 		strncpy((*target)->tokken, str_buf, len);
 		(*target)->left = tmp;
@@ -76,6 +80,84 @@ void push_str_et(et **target, char *str_buf, int len, tt type)
 	//(*target)->type = STR;
 	//(*target)->right = tmp;
 }
+
+#else
+void push_str_et(et **target, char *str_buf, int len, tt type)
+{
+	et **tmp = target;
+	et *prev = *target;
+	bool stack_oper = true;
+	//et **tmp = target;
+	//et **rtmp = target;
+	//et *ltmp = *target;
+	//et *tmp = *target;
+	//*target = make_et_root();
+	//strncpy((*target)->tokken, str_buf, len);
+
+#if 0
+	while(*rtmp && (*rtmp)->left)
+	{
+		rtmp = &(*target)->right;
+	}
+
+	if(*rtmp && (*rtmp)->left)
+	{
+		*rtmp = make_et_root();
+		strncpy((*rtmp)->tokken, str_buf, len);
+		(*target)->right = *rtmp;
+	}
+	else
+	{
+		//tmp = *target;
+		*target = make_et_root();
+		strncpy((*target)->tokken, str_buf, len);
+		(*target)->left = ltmp;
+	}
+#endif
+
+	while(*tmp)
+	{
+		if((*tmp)->type & (PLUS | MINUS | DIRIVATIVE | MULT | DIVIDE | EQUAL))
+		{
+			if(!(*tmp)->left)
+			{
+				prev = *tmp;
+				//tmp = &(*tmp)->left;
+				stack_oper = true;
+				break;
+			}
+			else
+			{
+				tmp = &(*tmp)->right;
+				stack_oper = false;
+			}
+		}
+		else
+		{
+			prev = *tmp;
+			//tmp = &(*tmp)->left;
+			stack_oper = true;
+			break;
+		}
+	}
+
+	if(stack_oper)
+	{
+		*tmp = make_et_root();
+		strncpy((*tmp)->tokken, str_buf, len);
+		(*tmp)->left = prev;
+		(*tmp)->type = type;
+	}
+	else
+	{
+		*tmp = make_et_root();
+		strncpy((*tmp)->tokken, str_buf, len);
+		(*tmp)->type = type;
+	}
+	//(*target)->type = STR;
+	//(*target)->right = tmp;
+}
+#endif
 
 void push_num_et(et **target, char *num_buf, int len)
 {
@@ -172,7 +254,7 @@ void solve(char *str)
 				break;
 
 			case ' ':
-				printf("white space detect\n");
+				//printf("white space detect\n");
 				break;
 
 			case '\n':
@@ -277,7 +359,7 @@ void solve(char *str)
 		}
 	}
 
-	root->right = after_equal;
+	//root->right = after_equal;
 }
 
 void print_math_tree(et *root)
@@ -292,6 +374,25 @@ void print_math_tree(et *root)
 	}
 }
 
+void delete_all_node(et **root)
+{
+	et **tmp = root;
+
+	if(*tmp)
+	{
+		et **left = &(*tmp)->left;
+		et **right = &(*tmp)->right;
+
+		delete_all_node(left);
+		(*tmp)->left = NULL;
+
+		delete_all_node(right);
+		(*tmp)->right = NULL;
+
+		free(*tmp);
+	}
+}
+
 int main(void)
 {
 	//root = make_exp_tree_root();
@@ -300,11 +401,14 @@ int main(void)
 	print_math_tree(root);
 	printf("\n");
 
-#if 0
+	delete_all_node(&root);
+
 	solve("y' - 3y = 24\n");
 	print_math_tree(root);
 	printf("\n");
 
+	delete_all_node(&root);
+#if 0
 	solve("3y' - 9y = 27\n");
 	solve("y' - 12y = 24\n");
 	solve("y'' + 5y' + 6y = 0\n");
