@@ -76,6 +76,8 @@ int main(void)
 	solve("y' - 3y = 24");
 	solve("3y' - 9y = 27");
 	solve("y' - 12y = 24");
+	solve("y'' + 5y' + 6y = 0");
+	solve("xy^2 + (x^2 * y + 3)y' = 0");
 
 	return 0;
 }
