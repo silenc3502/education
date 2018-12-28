@@ -228,6 +228,7 @@ void solve(char *str)
 
 			case '-':
 				printf("- detect\n");
+				push_str_et(&root, "-", 1, MINUS);
 				need_right = true;
 				break;
 
@@ -274,6 +275,7 @@ void solve(char *str)
 					push_str_et(&root, str_buf, strlen(str_buf), STR);
 #endif
 				push_str_et(&root, str_buf, strlen(str_buf), STR);
+				memset(str_buf, 0x0, sizeof(str_buf));
 
 			default:
 				break;
@@ -384,35 +386,53 @@ void delete_all_node(et **root)
 		et **right = &(*tmp)->right;
 
 		delete_all_node(left);
-		(*tmp)->left = NULL;
+		//(*tmp)->left = NULL;
 
 		delete_all_node(right);
-		(*tmp)->right = NULL;
+		//(*tmp)->right = NULL;
 
 		free(*tmp);
 	}
+
+	*tmp = NULL;
 }
 
 int main(void)
 {
 	//root = make_exp_tree_root();
 
+#if 0
 	solve("y = x + 3\n");
 	print_math_tree(root);
 	printf("\n");
-
 	delete_all_node(&root);
 
 	solve("y' - 3y = 24\n");
 	print_math_tree(root);
 	printf("\n");
-
 	delete_all_node(&root);
-#if 0
+
 	solve("3y' - 9y = 27\n");
+	print_math_tree(root);
+	printf("\n");
+	delete_all_node(&root);
+
 	solve("y' - 12y = 24\n");
+	print_math_tree(root);
+	printf("\n");
+	delete_all_node(&root);
+
 	solve("y'' + 5y' + 6y = 0\n");
+	print_math_tree(root);
+	printf("\n");
+	delete_all_node(&root);
+#endif
+
+#if 1
 	solve("xy^2 + (x^2 * y + 3)y' = 0\n");
+	print_math_tree(root);
+	printf("\n");
+	delete_all_node(&root);
 #endif
 
 	return 0;
