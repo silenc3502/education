@@ -33,6 +33,7 @@ struct exp_tree
 };
 
 et *root;
+et *right;
 et *after_equal;
 
 bool need_right;
@@ -52,16 +53,24 @@ et *make_et_root(void)
 
 void push_str_et(et **target, char *str_buf, int len, tt type)
 {
-	et *tmp = *target;
-	*target = make_et_root();
-	strncpy((*target)->tokken, str_buf, len);
+	et *tmp = NULL;
+	//et *tmp = *target;
+	//*target = make_et_root();
+	//strncpy((*target)->tokken, str_buf, len);
 
-	if(!tmp)
-		(*target)->left = tmp;
-	else if(tmp->type == (PLUS || MINUS || MULT || DIVIDE || DIRIVATIVE))
-		tmp->right = *target;
+	if(tmp && tmp->left)
+	{
+		tmp = make_et_root();
+		strncpy(tmp->tokken, str_buf, len);
+		(*target)->right = tmp;
+	}
 	else
+	{
+		tmp = *target;
+		*target = make_et_root();
+		strncpy((*target)->tokken, str_buf, len);
 		(*target)->left = tmp;
+	}
 
 	(*target)->type = type;
 	//(*target)->type = STR;
@@ -122,28 +131,37 @@ void solve(char *str)
 		switch(c)
 		{
 			case '+':
+#if 0
 				if(find_equal)
 					push_str_et(&after_equal, "+", 1, PLUS);
 				else
 					push_str_et(&root, "+", 1, PLUS);
+#endif
+				push_str_et(&root, "+", 1, PLUS);
+
+				need_right = true;
 
 				printf("+ detect\n");
 				break;
 
 			case '-':
 				printf("- detect\n");
+				need_right = true;
 				break;
 
 			case '*':
 				printf("* detect\n");
+				need_right = true;
 				break;
 
 			case '/':
 				printf("/ detect\n");
+				need_right = true;
 				break;
 
 			case '^':
 				printf("^ detect\n");
+				need_right = true;
 				break;
 
 			case '=':
@@ -161,11 +179,22 @@ void solve(char *str)
 				printf("finish line detect\n");
 				break;
 
-			default:
+			case 'a' ... 'z':
+			case 'A' ... 'Z':
+			case '0' ... '9':
 				*str--;
 				str += read_non_ws(str_buf, &(*str));
+
+#if 0
+				if(root->left)
+					push_str_et(&right, str_buf, strlen(str_buf), STR);
+				else
+					push_str_et(&root, str_buf, strlen(str_buf), STR);
+#endif
 				push_str_et(&root, str_buf, strlen(str_buf), STR);
 
+			default:
+				break;
 #if 0
 				if((c > 0x61 && c < 0x7a) || (c > 0x41 && c < 0x5a))
 				{
