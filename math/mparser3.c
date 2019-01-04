@@ -1,7 +1,34 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdarg.h>
 #include <stdbool.h>
+
+#if 0
+void debug(char *str, ...)
+{
+	va_list ap;
+	char buf[128] = {0};
+
+	va_start(ap, str);
+	vsprintf(buf, str, ap);
+	va_end(ap);
+
+	fprintf(stdout, "%s: %s", __FUNCTION__, buf);
+}
+
+#ifdef __DEBUG__
+#define print(str, ...)				debug(str, __VA_ARGS__)
+#else
+#define print(str, ...)				((void)0)
+#endif
+#endif
+
+#ifdef __DEBUG__
+#define debug(fmt, args...)			printf(fmt, ##args)
+#else
+#define debug(fmt, args...)			do {} while(0)
+#endif
 
 #define	VAR_SEPARATE			1
 #define EXACT					2
@@ -198,6 +225,29 @@ int read_non_ws(char *str_buf, char *str)
 	return i;
 }
 
+int handle_brace(char *str_buf, char *str)
+{
+	char c;
+	int cnt = 0, brace_cnt = 1;
+
+	while(c = *str++)
+	{
+		if(c == '(')
+			brace_cnt++;
+		else if(c == ')')
+			brace_cnt--;
+
+		cnt++;
+
+		if(!brace_cnt)
+			break;
+	}
+
+	strncpy(str_buf, str - (cnt + 1), cnt + 1);
+
+	return cnt;
+}
+
 void solve(char *str)
 {
 	int str_cnt = 0, num_cnt = 0;
@@ -223,33 +273,33 @@ void solve(char *str)
 
 				need_right = true;
 
-				printf("+ detect\n");
+				debug("+ detect\n");
 				break;
 
 			case '-':
-				printf("- detect\n");
+				debug("- detect\n");
 				push_str_et(&root, "-", 1, MINUS);
 				need_right = true;
 				break;
 
 			case '*':
-				printf("* detect\n");
+				debug("* detect\n");
 				need_right = true;
 				break;
 
 			case '/':
-				printf("/ detect\n");
+				debug("/ detect\n");
 				need_right = true;
 				break;
 
 			case '^':
-				printf("^ detect\n");
+				debug("^ detect\n");
 				need_right = true;
 				break;
 
 			case '=':
 				push_str_et(&root, "=", 1, EQUAL);
-				printf("= detect\n");
+				debug("= detect\n");
 				find_equal = true;
 				need_right = true;
 				break;
@@ -259,7 +309,13 @@ void solve(char *str)
 				break;
 
 			case '\n':
-				printf("finish line detect\n");
+				debug("finish line detect\n");
+				break;
+
+			case '(':
+				str += handle_brace(str_buf, &(*str));
+				push_str_et(&root, str_buf, strlen(str_buf), STR);
+				memset(str_buf, 0x0, sizeof(str_buf));
 				break;
 
 			case 'a' ... 'z':
@@ -401,7 +457,6 @@ int main(void)
 {
 	//root = make_exp_tree_root();
 
-#if 0
 	solve("y = x + 3\n");
 	print_math_tree(root);
 	printf("\n");
@@ -426,14 +481,13 @@ int main(void)
 	print_math_tree(root);
 	printf("\n");
 	delete_all_node(&root);
-#endif
 
-#if 1
 	solve("xy^2 + (x^2 * y + 3)y' = 0\n");
 	print_math_tree(root);
 	printf("\n");
 	delete_all_node(&root);
-#endif
+
+	debug("test = %d\n", 3);
 
 	return 0;
 }
