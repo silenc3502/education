@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Materials, light and animation</title>
+    <script type="text/javascript" src="jsLibs/three.js"></script>
+    <script type="text/javascript" src="jsLibs/stats.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+<div id="Stats-output">
+</div>
+<div id="WebGL-output">
+</div>
+
+<script type="text/javascript">
+    function init() {
+        var stats = initStats();
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        var renderer = new THREE.WebGLRenderer();
+
+        renderer.setClearColor(new THREE.Color(0xEEEEEE, 1.0));
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMapEnabled = true;
+
+        var planeGeometry = new THREE.PlaneGeometry(60, 20, 1, 1);
+        var planeMaterial = new THREE.MeshLambertMaterial({color: 0xffff00});
+        var plane = new THREE.Mesh(planeGeometry, planeMaterial);
+
+        plane.receiveShadow = true;
+
+        plane.rotation.x = -0.5 * Math.PI;
+        plane.position.x = 15;
+        plane.position.y = 0;
+        plane.position.z = 0;
+
+        scene.add(plane);
+
+        var cubeGeometry = new THREE.BoxGeometry(4, 4, 4);
+        var cubeMaterial = new THREE.MeshLambertMaterial({color: 0xff0000});
+        var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+        cube.castShadow = true;
+
+        cube.position.x = -4;
+        cube.position.y = 3;
+        cube.position.z = 0;
+
+        scene.add(cube);
+
+/*
+        var sphereGeometry = new THREE.SphereGeometry(4, 20, 20);
+        var sphereMaterial = new THREE.MeshLambertMaterial({color: 0x7777ff});
+        var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+
+        sphere.position.x = 20;
+        sphere.position.y = 0;
+        sphere.position.z = 2;
+        sphere.castShadow = true;
+
+        scene.add(sphere);
+*/
+        
+        var sphereGeometry2 = new THREE.SphereGeometry(0.4, 20, 20);
+        var sphereMaterial2 = new THREE.MeshLambertMaterial({color: 0xff0000});
+        var sphere2 = new THREE.Mesh(sphereGeometry2, sphereMaterial2);
+        var sphere3 = new THREE.Mesh(sphereGeometry2, sphereMaterial2);
+        var sphere4 = new THREE.Mesh(sphereGeometry2, sphereMaterial2);
+        var sphere5 = new THREE.Mesh(sphereGeometry2, sphereMaterial2);
+        var sphere6 = new THREE.Mesh(sphereGeometry2, sphereMaterial2);
+        var sphere7 = new THREE.Mesh(sphereGeometry2, sphereMaterial2);
+        var sphere8 = new THREE.Mesh(sphereGeometry2, sphereMaterial2);
+
+        sphere2.position.x = -5;
+        sphere2.position.y = 10;
+        sphere2.position.z = 10;
+        sphere2.castShadow = true;
+
+        scene.add(sphere2);
+
+        sphere3.position.x = -5;
+        sphere3.position.y = 10;
+        sphere3.position.z = 2;
+        sphere3.castShadow = true;
+
+        sphere4.position.x = -5;
+        sphere4.position.y = 2;
+        sphere4.position.z = 10;
+        sphere4.castShadow = true;
+
+        sphere5.position.x = -5;
+        sphere5.position.y = 2;
+        sphere5.position.z = 2;
+        sphere5.castShadow = true;
+
+        sphere6.position.x = -5;
+        sphere6.position.y = 6;
+        sphere6.position.z = -2;
+        sphere6.castShadow = true;
+
+        sphere7.position.x = -5;
+        sphere7.position.y = 6;
+        sphere7.position.z = 6;
+        sphere7.castShadow = true;
+
+        sphere8.position.x = -5;
+        sphere8.position.y = 6;
+        sphere8.position.z = 14;
+        sphere8.castShadow = true;
+
+        camera.position.x = -30;
+        camera.position.y = 40;
+        camera.position.z = 30;
+        camera.lookAt(scene.position);
+
+        var ambientLight = new THREE.AmbientLight(0x0c0c0c);
+        scene.add(ambientLight);
+
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(-80, 80, -10);
+        spotLight.castShadow = true;
+        scene.add(spotLight);
+
+        document.getElementById("WebGL-output").appendChild(renderer.domElement);
+
+        var step = 0;
+		var re_step = 0;
+		var re_step2 = 0;
+		var re_step3 = 0;
+		var re_step4 = 0;
+		var re_step5 = 0;
+		var re_step6 = 0;
+
+        renderScene();
+
+        function renderScene() {
+            stats.update();
+            cube.rotation.x += 0.02;
+            cube.rotation.y += 0.02;
+            cube.rotation.z += 0.02;
+
+            step += 0.04;
+/*
+            sphere.position.x = 20 + ( 10 * (Math.cos(step)));
+            sphere.position.y = 2 + ( 10 * Math.abs(Math.sin(step)));
+*/
+            
+            sphere2.position.x = -5 + 20 * step;
+			if(step > 0.4)
+			{
+				re_step += 0.04;
+        		scene.add(sphere3);
+	            sphere3.position.x = -5 + 20 * re_step;
+			}
+			if(step > 0.8)
+			{
+				re_step2 += 0.04;
+				scene.add(sphere4);
+            	sphere4.position.x = -5 + 20 * re_step2;
+			}
+			if(step > 1.2)
+			{
+				re_step3 += 0.04;
+				scene.add(sphere5);
+	            sphere5.position.x = -5 + 20 * re_step3;
+			}
+			if(step > 1.6)
+			{
+				re_step4 += 0.04;
+				scene.add(sphere6);
+	            sphere6.position.x = -5 + 20 * re_step4;
+			}
+			if(step > 2.0)
+			{
+				re_step5 += 0.04;
+				scene.add(sphere7);
+    	        sphere7.position.x = -5 + 20 * re_step5;
+			}
+			if(step > 2.4)
+			{
+				re_step6 += 0.04;
+				scene.add(sphere8);
+	            sphere8.position.x = -5 + 20 * re_step6;
+			}
+
+			if(step > 6.0)
+			{
+				step = re_step = re_step2 = re_step3 = re_step4 = re_step5 = re_step6 = 0;
+			}
+
+            requestAnimationFrame(renderScene);
+            renderer.render(scene, camera);
+        }
+
+        function initStats() {
+            var stats = new Stats();
+
+            stats.setMode(0); // 0: fps, 1: ms
+
+            stats.domElement.style.position = 'absolute';
+            stats.domElement.style.left = '0px';
+            stats.domElement.style.top = '0px';
+
+            document.getElementById("Stats-output").appendChild(stats.domElement);
+
+            return stats;
+        }
+    }
+    window.onload = init;
+
+</script>
+</body>
+</html>

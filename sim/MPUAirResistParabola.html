@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>reading file</title>
+	<script type="text/javascript" src="jsLibs/three.js"></script>
+    <script type="text/javascript" src="jsLibs/stats.js"></script>
+	<style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+
+    <script type="text/javascript">
+
+	var reader = new FileReader();
+
+	function chkNum(str) {
+		newArr = [];
+		scnt = 0;
+		numFlag = 0;
+
+		for(var i = 0; i < str.length; i++) {
+			for(var j = 0; j < str[i].length; j++) {
+				if(str[i][j] == '=') {
+					numFlag = 1;
+				}
+
+				if(str[i][j] != ' ' && numFlag == 1) {
+					newArr[scnt++] = parseFloat();
+				}
+			}
+		}
+
+		console.log("scnt = " + scnt);
+	}
+
+	function readText(that){
+		if(that.files && that.files[0]){
+			var reader = new FileReader();
+			reader.onload = function (e) {  
+				var output=e.target.result;
+				var farr = [];
+				var arr = [];
+
+				output = output.split("\n");
+
+				for(var i = 0; i < output.length - 1; i++) {
+					arr[i] = output[i].split("=");
+				}
+				//chkNum(output);
+
+				for(var i = 0; i < arr.length; i++) {
+					farr[i] = parseFloat(arr[i][1]);
+				}
+
+				//document.getElementById('main').innerHTML= output;
+				init(farr);
+			};
+			reader.readAsText(that.files[0]);
+		}
+	}
+
+	function init(str) {
+		//console.log(str);
+		var mpu_data = str;
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(100, window.innerWidth / window.innerHeight, 0.1, 1000);
+        var renderer = new THREE.WebGLRenderer();
+
+        renderer.setClearColor(new THREE.Color(0xEEEEEE, 1.0));
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMapEnabled = true;
+
+        var planeGeometry = new THREE.PlaneGeometry(60, 20, 1, 1);
+        var planeMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
+        var plane = new THREE.Mesh(planeGeometry, planeMaterial);
+        plane.receiveShadow = true;
+
+        plane.rotation.x = -0.5 * Math.PI;
+        plane.position.x = 15;
+        plane.position.y = 0;
+        plane.position.z = 0;
+
+        scene.add(plane);
+
+		var sphereGeometry = new THREE.SphereGeometry(4, 20, 20);
+        var sphereMaterial = new THREE.MeshLambertMaterial({color: 0x7777ff});
+        var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+
+        sphere.position.x = -20;
+        sphere.position.y = 4;
+        sphere.position.z = 2;
+        sphere.castShadow = true;
+
+        scene.add(sphere);
+
+		var material = new THREE.LineBasicMaterial({
+			color: 0x0000ff
+		});
+		
+		var geometry = new THREE.Geometry();
+		geometry.vertices.push(new THREE.Vector3( -20, 4, 2 ));
+		
+		//var line = new THREE.Line( geometry, material );
+		//scene.add( line );
+
+		camera.position.x = -30;
+        camera.position.y = 40;
+        camera.position.z = 30;
+        camera.lookAt(scene.position);
+
+        var ambientLight = new THREE.AmbientLight(0x0c0c0c);
+        scene.add(ambientLight);
+
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(-40, 120, -10);
+        spotLight.castShadow = true;
+        scene.add(spotLight);
+
+        document.getElementById("WebGL-output").appendChild(renderer.domElement);
+
+		var max_cnt = mpu_data.length;
+		var cnt = 0;
+		var step = 0;
+		var gravity = 9.8;
+		var loop_max = 150;
+		var loop_cnt = 0;
+
+		var init_velo = 100;
+		var pow_velo = init_velo * init_velo;
+		var sm = 0.001483;
+		var pow_sm = Math.pow(sm, 2);
+		var sair_resist = 0.47 * 1.29 * 4 * Math.PI * Math.pow(0.00714, 2);
+		var pow_sar = Math.pow(sair_resist, 2);
+		var smg = gravity * sm;
+		var exp_coeff;
+		var first;
+		var second;
+		var third;
+
+		console.log("mpu data length = " + mpu_data.length);
+
+		renderScene();
+
+		function renderScene() {
+			var angle = mpu_data[cnt];
+			var deg2rad = angle * Math.PI / 180.0;
+			var cos = Math.cos(deg2rad);
+			var sin = Math.sin(deg2rad);
+
+			console.log(mpu_data[cnt]);
+
+			step += 0.035;
+
+			//loop_cnt++;
+
+			//if(loop_cnt == loop_max) {
+			//	loop_cnt = 0;
+			//	cnt++;
+			//}
+
+			//geometry.vertices.push(new THREE.Vector3(
+			//	-20 + init_velo * cos * (sm / sair_resist) * (1 - Math.exp(-(sair_resist / sm) * step)),
+			//	4 + (sm / sair_resist) * (smg / sair_resist + init_velo * sin) * (1 - Math.exp(-(sair_resist / sm) * step)) - (smg / sair_resist) * step,
+			//	2
+			//));
+
+			//var line = new THREE.Line( geometry, material );
+			//scene.add( line );
+
+			sphere.position.x = -20 + init_velo * cos * (sm / sair_resist) * (1 - Math.exp(-(sair_resist / sm) * step));
+			sphere.position.y = 4 + (sm / sair_resist) * (smg / sair_resist + init_velo * sin) * (1 - Math.exp(-(sair_resist / sm) * step)) - (smg / sair_resist) * step;
+			
+			if(cnt == max_cnt)
+				cnt = 0;
+
+			if(sphere.position.y < 3.999999) {
+				alert("range = " + (sphere.position.x + 20));
+				cnt++;
+				loop_cnt = 0;
+				step = 0;
+			}
+
+			requestAnimationFrame(renderScene);
+			renderer.render(scene, camera);
+		}
+	}
+
+	function initStats() {
+		var stats = new Stats();
+
+        stats.setMode(0); // 0: fps, 1: ms
+
+        stats.domElement.style.position = 'absolute';
+        stats.domElement.style.left = '0px';
+        stats.domElement.style.top = '0px';
+
+        document.getElementById("Stats-output").appendChild(stats.domElement);
+
+        return stats;
+	}
+
+</script>
+</head>
+<body>
+	<input type="file" onchange='readText(this)' />
+	<div id="main"></div>
+	<div id="Stats-output">
+	</div>
+	<div id="WebGL-output">
+	</div>
+  </body>
+</html>

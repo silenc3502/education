@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Materials, light and animation</title>
+    <script type="text/javascript" src="jsLibs/three.js"></script>
+    <script type="text/javascript" src="jsLibs/stats.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+<div id="Stats-output">
+</div>
+<div id="WebGL-output">
+</div>
+
+<script type="text/javascript">
+    function init() {
+        var stats = initStats();
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        var renderer = new THREE.WebGLRenderer();
+
+        renderer.setClearColor(new THREE.Color(0x000000, 1.0));
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMapEnabled = true;
+
+        var planeGeometry = new THREE.PlaneGeometry(150, 100, 1, 1);
+        var planeMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
+        var plane = new THREE.Mesh(planeGeometry, planeMaterial);
+
+        plane.receiveShadow = true;
+
+        plane.rotation.x = -0.5 * Math.PI;
+        plane.position.x = 15;
+        plane.position.y = 0;
+        plane.position.z = 0;
+
+        scene.add(plane);
+
+		var cubeGeometry = new THREE.BoxGeometry(24, 4, 4);
+        var cubeMaterial = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe: false});
+        var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+
+        cube.position.x = 25;
+        cube.position.y = 3;
+        cube.position.z = 2;
+
+        scene.add(cube);
+
+        var sphereGeometry = new THREE.SphereGeometry(3, 20, 20);
+        var sphereMaterial = new THREE.MeshLambertMaterial({color: 0x7777ff});
+        var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+
+        sphere.position.x = -45;
+        sphere.position.y = 3;
+        sphere.position.z = 2;
+        sphere.castShadow = true;
+
+        scene.add(sphere);
+       
+        camera.position.x = 30;
+        camera.position.y = 30;
+        camera.position.z = 90;
+        camera.lookAt(scene.position);
+
+        var ambientLight = new THREE.AmbientLight(0x333333);
+       	scene.add(ambientLight);
+
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(-80, 150, 30);
+        spotLight.castShadow = true;
+        scene.add(spotLight);
+
+        document.getElementById("WebGL-output").appendChild(renderer.domElement);
+		document.addEventListener("keydown", keyEventListener, false);
+
+        var step = 0;
+		var newstep = 0;
+		var init_velo = 30;
+		var angle = 89;
+		var gravity = 10.0;
+		var pow_velo = init_velo * init_velo;
+		var deg2rad = angle * Math.PI / 180.0;
+		var cos = Math.cos(deg2rad);
+		var sin = Math.sin(deg2rad);
+		var coeff = 0.8
+		var init_x = -45;
+		var init_y = 3;
+		var backup_x = 0;
+		var new_step = 0;
+		var rand;
+		var idx = 0;
+
+		let LEFT = 37, RIGHT = 39, UP = 38, DOWN = 40;
+		let mpu_val = [];
+
+		mpu_data();
+        renderScene();
+
+		function mpu_data() {
+			for(let i = 1; i < 1024; i++) {
+				if(i < 264) {
+					mpu_val.push(i * 0.25 * Math.PI / 180.0);
+				} else {
+					rand = Math.random();
+					mpu_val.push((60 + rand) * Math.PI / 180.0);
+				}
+			}
+		}
+
+		function keyEventListener(e) {
+			if(e.keyCode == LEFT) {
+				add = -0.2;
+			} else if(e.keyCode == RIGHT) {
+				add = 0.2;
+			} else if(e.keyCode == UP) {
+				scene.rotation.x += 0.2;
+			}else if(e.keyCode == DOWN) {
+				scene.rotation.x -= 0.2;
+			} else {
+				return;
+			}
+
+			cube.position.x += add;
+		}
+
+        function renderScene() {
+            stats.update();
+
+            step += 0.04;
+			new_step += 0.04;
+
+			//sphere.position.x = init_x + (2 * pow_velo * cos * sin) * new_step / gravity;
+			sphere.position.x = init_x + (2 * init_velo * init_velo * cos * sin) * new_step / gravity + backup_x;
+			sphere.position.y = init_y + init_velo * sin * new_step - 0.5 * gravity * new_step * new_step;
+
+			if(new_step > 2 * init_velo * sin / gravity) {
+				backup_x += 2 * init_velo * init_velo * cos * sin * new_step / gravity;
+				init_velo *= coeff;
+				new_step = 0;
+			}
+
+			if(sphere.position.y < 3.000000009) {
+				sphere.position.x = sphere.position.x;
+				sphere.position.y = 3;
+			}
+
+			cube.rotation.z = mpu_val[idx++];
+			//cube.rotation.z = 0.25 * Math.PI;
+
+			if(idx == 1024)
+				idx = 0;
+
+            requestAnimationFrame(renderScene);
+            renderer.render(scene, camera);
+        }
+
+        function initStats() {
+            var stats = new Stats();
+
+            stats.setMode(0); // 0: fps, 1: ms
+
+            stats.domElement.style.position = 'absolute';
+            stats.domElement.style.left = '0px';
+            stats.domElement.style.top = '0px';
+
+            document.getElementById("Stats-output").appendChild(stats.domElement);
+
+            return stats;
+        }
+    }
+    window.onload = init;
+
+</script>
+</body>
+</html>

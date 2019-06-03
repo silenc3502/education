@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Materials, light and animation</title>
+    <script type="text/javascript" src="jsLibs/three.js"></script>
+    <script type="text/javascript" src="jsLibs/stats.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+<div id="Stats-output">
+</div>
+<div id="WebGL-output">
+</div>
+
+<script type="text/javascript">
+    function init() {
+        var stats = initStats();
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        var renderer = new THREE.WebGLRenderer();
+
+        renderer.setClearColor(new THREE.Color(0xcccccc, 1.0));
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMapEnabled = true;
+
+        var planeGeometry = new THREE.PlaneGeometry(150, 100, 1, 1);
+        var planeMaterial = new THREE.MeshLambertMaterial({color: 0xff0000});
+        var plane = new THREE.Mesh(planeGeometry, planeMaterial);
+
+        plane.receiveShadow = true;
+
+        plane.rotation.x = -0.5 * Math.PI;
+        plane.position.x = 15;
+        plane.position.y = 0;
+        plane.position.z = 0;
+
+        scene.add(plane);
+
+        var sphereGeometry = new THREE.SphereGeometry(3, 20, 20);
+        var sphereMaterial = new THREE.MeshLambertMaterial({color: 0x3333ff});
+        var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+
+        sphere.position.x = -45;
+        sphere.position.y = 103;
+        sphere.position.z = 2;
+        sphere.castShadow = true;
+
+        scene.add(sphere);
+
+		var sphere2 = new THREE.Mesh(sphereGeometry, sphereMaterial);
+
+        sphere2.position.x = -25;
+        sphere2.position.y = 103;
+        sphere2.position.z = 2;
+        sphere2.castShadow = true;
+
+        scene.add(sphere2);
+
+ 		var sphere3 = new THREE.Mesh(sphereGeometry, sphereMaterial);
+
+        sphere3.position.x = -5;
+        sphere3.position.y = 103;
+        sphere3.position.z = 2;
+        sphere3.castShadow = true;
+
+        scene.add(sphere3);      
+
+		var sphere4 = new THREE.Mesh(sphereGeometry, sphereMaterial);
+
+        sphere4.position.x = 15;
+        sphere4.position.y = 103;
+        sphere4.position.z = 2;
+        sphere4.castShadow = true;
+
+        scene.add(sphere4);
+
+        camera.position.x = -30;
+        camera.position.y = 100;
+        camera.position.z = 350;
+        camera.lookAt(scene.position);
+
+        var ambientLight = new THREE.AmbientLight(0x333333);
+       	scene.add(ambientLight);
+
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(-50, 300, 30);
+        spotLight.castShadow = true;
+        scene.add(spotLight);
+
+        document.getElementById("WebGL-output").appendChild(renderer.domElement);
+
+        var step = 0;
+		var init_velo = 30;
+		var angle = 89;
+		var gravity = 10.0;
+		var pow_velo = init_velo * init_velo;
+		var deg2rad = angle * Math.PI / 180.0;
+		var cos = Math.cos(deg2rad);
+		var sin = Math.sin(deg2rad);
+		var bm = 10.0;
+		var pow_bm = Math.pow(bm, 2);
+		var sm = 0.001483;
+		var pow_sm = Math.pow(sm, 2);
+		var air_resist = 0.47 * 1.29 * 4 * Math.PI * Math.pow(0.00714, 2);
+		var pow_ar = Math.pow(air_resist, 2);
+		var bmg = gravity * bm;
+		var smg = gravity * sm;
+		var exp_coeff;
+		var first;
+		var second;
+		var third;
+
+		console.log("pow_bm = " + pow_bm);
+		console.log("pow_ar = " + pow_ar);
+
+        renderScene();
+
+        function renderScene() {
+            stats.update();
+
+            step += 0.04;
+
+			sphere.position.y = 103 - 0.5 * gravity * Math.pow(step, 2);
+			sphere2.position.y = 103 - 0.5 * gravity * Math.pow(step, 2);
+
+			exp_coeff = Math.exp(-(air_resist / bm) * step);
+
+			first = (bmg / air_resist) * step;
+			second = (pow_bm / pow_ar) * gravity * exp_coeff;
+			third = (pow_bm / pow_ar) * gravity;
+
+			sphere3.position.y = 103 - (first + second - third);
+
+			exp_coeff = Math.exp(-(air_resist / sm) * step);
+
+			first = (smg / air_resist) * step;
+			second = (pow_sm / pow_ar) * gravity * exp_coeff;
+			third = (pow_sm / pow_ar) * gravity;
+
+			sphere4.position.y = 103 - (first + second - third);
+
+			console.log("first = " + first);
+			console.log("second = " + second);
+			console.log("third = " + third);
+
+            requestAnimationFrame(renderScene);
+            renderer.render(scene, camera);
+        }
+
+        function initStats() {
+            var stats = new Stats();
+
+            stats.setMode(0); // 0: fps, 1: ms
+
+            stats.domElement.style.position = 'absolute';
+            stats.domElement.style.left = '0px';
+            stats.domElement.style.top = '0px';
+
+            document.getElementById("Stats-output").appendChild(stats.domElement);
+
+            return stats;
+        }
+    }
+    window.onload = init;
+
+</script>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Materials, light and animation</title>
+    <script type="text/javascript" src="jsLibs/three.js"></script>
+    <script type="text/javascript" src="jsLibs/stats.js"></script>
+	<script type="text/javascript" src="jsLibs/dat.gui.js"></script>
+	<script type="text/javascript" src="assets/fonts/helvetiker_regular.typeface.js"></script>
+	<script type="text/javascript" src="assets/fonts/helvetiker_bold.typeface.js"></script>
+	<script type="text/javascript" src="assets/fonts/bitstream_vera_sans_mono_roman.typeface.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+			position: absolute;
+			margin: auto;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			right: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div id="Stats-output">
+</div>
+<div id="WebGL-output">
+</div>
+
+<script type="text/javascript">
+    function init() {
+		var stats = initStats();
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        var renderer = new THREE.WebGLRenderer();
+
+        renderer.setClearColor(new THREE.Color(0xEEEEEE, 1.0));
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMapEnabled = true;
+
+        var planeGeometry = new THREE.PlaneGeometry(60, 20, 1, 1);
+        var planeMaterial = new THREE.MeshLambertMaterial({color: 0xffffff, transparent: true, opacity: 0.9});
+        var plane = new THREE.Mesh(planeGeometry, planeMaterial);
+
+        plane.receiveShadow = true;
+
+        plane.rotation.x = -0.5 * Math.PI;
+        plane.position.x = 15;
+        plane.position.y = 0;
+        plane.position.z = 0;
+
+        scene.add(plane);
+
+		var cur_x = [];
+		var cur_y = [];
+        var step = 0;
+		var ghz5_amp = 10;
+		var ghz1_amp = 8;
+		var slice = 8192;
+		var sample_freq = 2000.0;
+		var sample_period;
+
+		sample_period = calcPeriod(sample_freq);
+		//step = getStep(slice, sample_period);
+
+		// scale * 1000 000 000
+		var ghz5 = 2.0 * Math.PI * 500.0;
+		var ghz1 = 2.0 * Math.PI * 100.0;
+		//var khz20 = 2.0 * Math.PI * 0.00002;
+		var whiteNoise = [];
+		var scale_factor = 30;
+		var i;
+
+ 		var cur_x3 = [];
+		var cur_y3 = [];
+		var lpf_y = [];
+
+		for(i = 0; i < slice; i++) {
+			lpf_y[i] = 0;
+		}
+
+		geometry3 = new THREE.Geometry();
+
+		for(i = 0, step = 0; i < slice; step += sample_period, i++) {
+			whiteNoise[i] = gaussianNoise();
+			cur_x3[i] = -1018.0 + step * slice / scale_factor;
+			cur_y3[i] = ghz5_amp * whiteNoise[i] * Math.sin(ghz5 * step) + ghz1_amp * Math.sin(ghz1 * step);
+		}
+
+		var fc = 111.0;
+		var rc = 1.0 / (2 * Math.PI * fc);
+
+		for(i = 1, step = 0; i < slice; i++) {
+			lpf_y[i] = (rc * lpf_y[i - 1] + sample_period * cur_y3[i]) / (rc + sample_period);
+			geometry3.vertices.push(new THREE.Vector3(cur_x3[i], lpf_y[i] / 3.0, 0));
+		}
+
+		material = new THREE.LineBasicMaterial( 
+			{ color: 0x800000, linewidth: 2 }
+		);
+
+		line3 = new THREE.Line(geometry3, material);
+		scene.add(line3);
+ 
+        camera.position.x = 0;
+        camera.position.y = 0;
+        camera.position.z = 50;
+        camera.lookAt(scene.position);
+
+        var ambientLight = new THREE.AmbientLight(0x0c0c0c);
+        scene.add(ambientLight);
+
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(-40, 60, -10);
+        spotLight.castShadow = true;
+        scene.add(spotLight);
+
+        document.getElementById("WebGL-output").appendChild(renderer.domElement);
+
+		var step;
+
+	    renderer.render(scene, camera);
+
+		function createMesh(geom) {
+			var meshMaterial = new THREE.MeshPhongMaterial({
+				specular: 0x808080,
+				color: 0x000000,
+				shininess: 10,
+				metal: false
+			});
+
+			var plane = THREE.SceneUtils.createMultiMaterialObject(geom, [meshMaterial]);
+			return plane;
+		}
+
+		function calcPeriod(freq) {
+            return 1.0 / freq;
+        }
+
+        function getStep(slice, period) {
+            return period / slice;
+        }
+
+		function gaussianNoise() {
+			var u = 0, v = 0;
+
+		    while(u === 0)
+				u = Math.random(); //Converting [0,1) to (0,1)
+
+		    while(v === 0)
+				v = Math.random();
+
+			let num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos( 2.0 * Math.PI * v );
+		    num = num / 10.0 + 0.5; // Translate to 0 -> 1
+
+		    if (num > 1 || num < 0)
+				return gaussianNoise();
+
+		    return num;
+		}
+
+		function initStats() {
+			var stats = new Stats();
+
+			stats.setMode(0);
+
+			stats.domElement.style.position = 'absolute';
+			stats.domElement.style.left = '0px';
+			stats.domElement.style.top = '0px';
+
+			document.getElementById("Stats-output").appendChild(stats.domElement);
+
+			return stats;
+		}
+    }
+    window.onload = init;
+
+</script>
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Materials, light and animation</title>
+    <script type="text/javascript" src="jsLibs/three.js"></script>
+    <script type="text/javascript" src="jsLibs/stats.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+			position: absolute;
+			margin: auto;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			right: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div id="WebGL-output">
+</div>
+
+<script type="text/javascript">
+    function init() {
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        var renderer = new THREE.WebGLRenderer();
+
+        renderer.setClearColor(new THREE.Color(0xEEEEEE, 1.0));
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMapEnabled = true;
+
+        var planeGeometry = new THREE.PlaneGeometry(60, 20, 1, 1);
+        var planeMaterial = new THREE.MeshLambertMaterial({color: 0xffffff, transparent: true, opacity: 0.9});
+        var plane = new THREE.Mesh(planeGeometry, planeMaterial);
+
+        plane.receiveShadow = true;
+
+        plane.rotation.x = -0.5 * Math.PI;
+        plane.position.x = 15;
+        plane.position.y = 0;
+        plane.position.z = 0;
+
+        scene.add(plane);
+
+		var cur_x = [];
+		var cur_y = [];
+        var step = 0;
+		var ghz5_amp = 10;
+		var ghz2_4_amp = 5;
+		var khz20_amp = 2;
+
+		// scale * 1000 000 000
+		var ghz5 = 2.0 * Math.PI * 50.0;
+		var ghz2_4 = 2.0 * Math.PI * 24;
+		//var khz20 = 2.0 * Math.PI * 0.00002;
+		var whiteNoise = [];
+		var i;
+
+		var module_freq1 = 500.0;
+		var module_freq2 = 240.0;
+		var analysis_freq = 600.0;
+		var slice = 1024;
+		var half_slice = slice / 2;
+		var spec_step;
+		var period;
+		var real_cos = [];
+		var imag_sin = [];
+
+		for(var i = 0; i < slice; i++) {
+			real_cos[i] = [];
+			imag_sin[i] = [];
+		}
+
+		geometry = [];
+		
+		for(var i = 0; i < 2 * slice; i++) {
+			geometry[i] = new THREE.Geometry();
+		}
+
+
+		alert("i = " + i);
+
+		period = calcPeriod(analysis_freq);
+		spec_step = getStep(slice, period);
+
+		for(var i = 0; i < slice; i++) {
+			for(var j = 0; j < slice; j++) {
+				real_cos[i][j] = Math.cos(-(2 * Math.PI * j * i) / slice);
+				imag_sin[i][j] = Math.sin(-(2 * Math.PI * j * i) / slice);
+			}
+		}
+
+		var t = 0.0;
+
+		for(i = 0; i < slice; t += spec_step, i++) {
+			if(t > period) {
+				break;
+			}
+
+			whiteNoise[i] = gaussianNoise();
+
+			cur_x[i] = t;
+			cur_y[i] = 100 * Math.sin(2 * Math.PI * module_freq1 * t) + 50 * Math.cos(2 * Math.PI * module_freq2 * t) + 20 * Math.cos(2 * Math.PI * whiteNoise[i] * t);
+		}
+
+		var res_real = [];
+		var res_imag = [];
+
+		for(i = 0; i < slice; i++) {
+			res_real[i] = 0;
+			res_imag[i] = 0;
+		}
+
+		for(i = 0; i < slice; i++) {
+			for(j = 0; j < slice; j++) {
+				res_real[i] += cur_y[j] * real_cos[i][j];
+				res_imag[i] += cur_y[j] * imag_sin[i][j];
+			}
+
+			console.log("res_imag[" + i + "] = " + res_imag[i]);
+		}
+
+		for(i = 0; i < slice; i++) {
+			geometry[i].vertices.push(new THREE.Vector3((-half_slice + i) * 0.01 , res_imag[i] / half_slice * 0.25));
+			geometry[i].vertices.push(new THREE.Vector3((-half_slice + i) * 0.01, 0));
+		}
+
+		for(i = slice; i < 2 * slice; i++) {
+			geometry[i].vertices.push(new THREE.Vector3((-half_slice + (i - slice)) * 0.01, res_real[i] / half_slice * 0.25));
+			geometry[i].vertices.push(new THREE.Vector3((-half_slice + (i - slice)) * 0.01, 0));
+		}
+
+		material = new THREE.LineBasicMaterial( 
+			{ color: 0x0000ff, linewidth: 5 }
+		);
+
+		var line = [];
+
+		for(i = 0; i < 2 * slice; i++) {
+			line = new THREE.Line(geometry[i], material);
+			scene.add(line);
+		}
+
+        camera.position.x = 0;
+        camera.position.y = 0;
+        camera.position.z = 50;
+        camera.lookAt(scene.position);
+
+        var ambientLight = new THREE.AmbientLight(0x0c0c0c);
+        scene.add(ambientLight);
+
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(-40, 60, -10);
+        spotLight.castShadow = true;
+        scene.add(spotLight);
+
+        document.getElementById("WebGL-output").appendChild(renderer.domElement);
+
+		var prev_x;
+		var prev_y;
+		var cnt = 0;
+
+        renderer.render(scene, camera);
+
+		function calcPeriod(freq) {
+			return 1.0 / freq;
+		}
+
+		function getStep(slice, period) {
+			return period / slice;
+		}
+
+		function gaussianNoise() {
+			var u = 0, v = 0;
+
+		    while(u === 0)
+				u = Math.random(); //Converting [0,1) to (0,1)
+
+		    while(v === 0)
+				v = Math.random();
+
+			let num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos( 2.0 * Math.PI * v );
+		    num = num / 10.0 + 0.5; // Translate to 0 -> 1
+
+		    if (num > 1 || num < 0)
+				return (gaussianNoise() * 200) % 200;
+
+		    return (num * 200) % 200;
+		}
+    }
+    window.onload = init;
+
+</script>
+</body>
+</html>

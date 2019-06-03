@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>reading file</title>
+	<script type="text/javascript" src="jsLibs/three.js"></script>
+    <script type="text/javascript" src="jsLibs/stats.js"></script>
+	<style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+
+    <script type="text/javascript">
+
+	var reader = new FileReader();
+
+	function readText(that){
+		if(that.files && that.files[0]){
+			var reader = new FileReader();
+			reader.onload = function (e) {  
+				var output=e.target.result;
+
+				//process text to show only lines with "@":				
+				//output=output.split("\n").filter(/./.test, /\@/).join("\n");
+				output = output.split("\n");
+
+				document.getElementById('main').innerHTML= output;
+				init(output);
+			};//end onload()
+			reader.readAsText(that.files[0]);
+		}//end if html5 filelist support
+	}
+
+	function init(str) {
+		//console.log(str);
+		var mpu_data = str;
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(100, window.innerWidth / window.innerHeight, 0.1, 1000);
+        var renderer = new THREE.WebGLRenderer();
+
+        renderer.setClearColor(new THREE.Color(0xEEEEEE, 1.0));
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMapEnabled = true;
+
+        var planeGeometry = new THREE.PlaneGeometry(60, 20, 1, 1);
+        var planeMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
+        var plane = new THREE.Mesh(planeGeometry, planeMaterial);
+        plane.receiveShadow = true;
+
+        plane.rotation.x = -0.5 * Math.PI;
+        plane.position.x = 15;
+        plane.position.y = 0;
+        plane.position.z = 0;
+
+        scene.add(plane);
+
+		var sphereGeometry = new THREE.SphereGeometry(4, 20, 20);
+        var sphereMaterial = new THREE.MeshLambertMaterial({color: 0x7777ff});
+        var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+
+        sphere.position.x = -20;
+        sphere.position.y = 4;
+        sphere.position.z = 2;
+        sphere.castShadow = true;
+
+        scene.add(sphere);
+
+		camera.position.x = -30;
+        camera.position.y = 40;
+        camera.position.z = 30;
+        camera.lookAt(scene.position);
+
+        var ambientLight = new THREE.AmbientLight(0x0c0c0c);
+        scene.add(ambientLight);
+
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(-40, 120, -10);
+        spotLight.castShadow = true;
+        scene.add(spotLight);
+
+        document.getElementById("WebGL-output").appendChild(renderer.domElement);
+
+		var max_cnt = mpu_data.length;
+		var cnt = 0;
+		var step = 0;
+		var velo = 30;
+		var gravity = 10;
+
+		console.log("mpu data length = " + mpu_data.length);
+
+		renderScene();
+
+		function renderScene() {
+			//console.log(mpu_info);
+			step += 0.035;
+			cnt++;
+
+			console.log(mpu_data[cnt]);
+
+			sphere.position.x = -20 + velo * Math.cos(Math.PI / 6) * step;
+			sphere.position.y = 4 + velo * Math.sin(Math.PI / 6) * step - 0.5 * gravity * Math.pow(step, 2);
+
+			if(step > 2 * velo * Math.sin(Math.PI / 6) / gravity)
+				step = 0;
+
+			if(cnt == max_cnt)
+				cnt = 0;
+
+			requestAnimationFrame(renderScene);
+			renderer.render(scene, camera);
+		}
+	}
+
+	function initStats() {
+		var stats = new Stats();
+
+        stats.setMode(0); // 0: fps, 1: ms
+
+        stats.domElement.style.position = 'absolute';
+        stats.domElement.style.left = '0px';
+        stats.domElement.style.top = '0px';
+
+        document.getElementById("Stats-output").appendChild(stats.domElement);
+
+        return stats;
+	}
+
+</script>
+</head>
+<body>
+	<input type="file" onchange='readText(this)' />
+	<div id="main"></div>
+	<div id="Stats-output">
+	</div>
+	<div id="WebGL-output">
+	</div>
+  </body>
+</html>
